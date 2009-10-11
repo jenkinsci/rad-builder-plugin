@@ -8,12 +8,12 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>hudson.plugins</groupId>
+  <groupId>org.jvnet.hudson.plugins</groupId>
   <artifactId>rad-builder</artifactId>
   <packaging>hpi</packaging>
   <name>IBM Rational Application Developer Builder Plugin</name>
   <url>http://wiki.hudson-ci.org/display/HUDSON/RAD+Builder+Plugin</url>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
