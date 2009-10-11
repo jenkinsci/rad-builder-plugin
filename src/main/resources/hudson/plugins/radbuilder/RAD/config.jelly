@@ -1,0 +1,69 @@
+<!--
+  - The MIT License
+  -
+  - Copyright (c) 2009, Romain Seguy
+  -
+  - Permission is hereby granted, free of charge, to any person obtaining a copy
+  - of this software and associated documentation files (the "Software"), to deal
+  - in the Software without restriction, including without limitation the rights
+  - to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  - copies of the Software, and to permit persons to whom the Software is
+  - furnished to do so, subject to the following conditions:
+  -
+  - The above copyright notice and this permission notice shall be included in
+  - all copies or substantial portions of the Software.
+  -
+  - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  - IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  - FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  - AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  - LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  - THE SOFTWARE.
+  -->
+
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <j:if test="${!empty(descriptor.installations)}">
+        <f:entry title="${%RAD installation}" field="radInstallationName">
+            <select name="rad.radInstallationName" class="setting-input" field="">
+                <j:forEach var="installation" items="${descriptor.installations}">
+                    <f:option selected="${installation.name==instance.radInstallation.name}" value="${installation.name}">
+                        ${installation.name}
+                    </f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+    </j:if>
+    <f:entry title="${%Targets}" field="targets">
+        <f:expandableTextbox name="rad.targets" value="${instance.targets}"/>
+    </f:entry>
+    <f:advanced>
+        <f:entry title="${%Build file}" field="buildFile" description="${%Path relative to the workspace of the project}">
+            <f:textbox name="rad.buildFile" value="${instance.buildFile}"/>
+        </f:entry>
+        <f:entry title="${%RAD workspace}" field="radWorkspace" description="${%Path relative to the workspace of the project}">
+            <f:textbox name="rad.radWorkspace" value="${instance.radWorkspace}"/>
+        </f:entry>
+        <f:entry title="" field="deleteRadWorkspaceContent">
+            <f:checkbox
+                id="rad.deleteRadWorkspaceContent"
+                name="rad.deleteRadWorkspaceContent"
+                checked="${instance.deleteRadWorkspaceContent}" />
+            <label for="rad.deleteRadWorkspaceContent">
+                ${%Remove RAD workspace content}
+            </label>
+        </f:entry>
+        <f:entry title="" field="deleteRadWorkspaceMetadata">
+            <f:checkbox
+                id="rad.deleteRadWorkspaceMetadata"
+                name="rad.deleteRadWorkspaceMetadata"
+                checked="${instance.deleteRadWorkspaceMetadata}" />
+            <label for="rad.deleteRadWorkspaceMetadata">
+                ${%Remove only RAD workspace metadata folder}
+            </label>
+        </f:entry>
+        <f:entry title="${%Properties}" field="properties">
+            <f:textarea name="rad.properties" value="${instance.properties}"/>
+        </f:entry>
+    </f:advanced>
+</j:jelly>

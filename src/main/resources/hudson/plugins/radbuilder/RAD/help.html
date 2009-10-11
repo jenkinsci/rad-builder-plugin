@@ -1,0 +1,40 @@
+<!--
+  - The MIT License
+  -
+  - Copyright (c) 2009, Romain Seguy
+  - Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+  -
+  - Permission is hereby granted, free of charge, to any person obtaining a copy
+  - of this software and associated documentation files (the "Software"), to deal
+  - in the Software without restriction, including without limitation the rights
+  - to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  - copies of the Software, and to permit persons to whom the Software is
+  - furnished to do so, subject to the following conditions:
+  -
+  - The above copyright notice and this permission notice shall be included in
+  - all copies or substantial portions of the Software.
+  -
+  - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  - IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  - FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  - AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  - LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  - THE SOFTWARE.
+  -->
+
+<div>
+    For projects that need to use RAD's headless capabilities (or, even better,
+    BU) as the build system. This causes Hudson to invoke RAD/BU with the given
+    targets and options. Any non-zero exit code causes Hudson to mark the build
+    as a failure.
+    <br/>
+    Hudson supplies some <a href="/env-vars.html">environment variables</a> that
+    can be used from within the build script.
+    <br/>
+    To know more about RAD's headless features, please refer to the
+    <a href="http://publib.boulder.ibm.com/infocenter/radhelp/v7r0m0/topic/com.ibm.etools.ant.tasks.doc/topics/tjant.html">RAD 7.0 Infocenter</a>
+    or to the
+    <a href="http://publib.boulder.ibm.com/infocenter/radhelp/v7r5/topic/com.ibm.etools.ant.tasks.doc/topics/cant_usergoalcontainer.html">RAD 7.5 Infocenter</a>.
+    
+</div>
