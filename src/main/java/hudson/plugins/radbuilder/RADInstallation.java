@@ -40,6 +40,7 @@ import hudson.tools.ToolInstallation;
 import hudson.util.FormValidation;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.jvnet.localizer.ResourceBundleHolder;
@@ -62,7 +63,7 @@ public class RADInstallation extends ToolInstallation implements NodeSpecific<RA
 
     @DataBoundConstructor
     public RADInstallation(String name, String home) {
-        super(name, removeTrailingBackslash(home));
+        super(name, removeTrailingBackslash(home), Collections.EMPTY_LIST);
     }
 
     public RADInstallation forEnvironment(EnvVars environment) {
