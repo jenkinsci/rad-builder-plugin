@@ -57,7 +57,7 @@ import org.kohsuke.stapler.StaplerRequest;
  * end of the execution of the builder</p>
  *
  * @author Romain Seguy
- * @version 1.0.1
+ * @version 1.1
  */
 public class RAD extends Builder {
 
@@ -73,7 +73,12 @@ public class RAD extends Builder {
     public final static String RAD_WORKSPACE_ENV_VAR_UNIX = "workspace";
     /** Name of the .metadata folder of each RAD workspace. */
     public final static String RAD_WORKSAPCE_METADATA_FOLDER = ".metadata";
-
+    /**
+     * When set to true, a new {@code PROJECT_WORKSPACE} environment variable
+     * will be created containing to replace the standard {@code WORKSPACE} one
+     * which is overwritten because of RAD.
+     */
+    private final boolean activateProjectWorkspaceVar;
     /** Optional build script path relative to the workspace. */
     private final String buildFile;
     /**
@@ -99,12 +104,13 @@ public class RAD extends Builder {
     private final String targets;
 
     @DataBoundConstructor
-    public RAD(String radInstallationName, String buildFile, boolean deleteRadWorkspaceContent, boolean deleteRadWorkspaceMetadata, String properties, String radWorkspace, String targets) {
-        this.radInstallationName = radInstallationName;
+    public RAD(boolean activateProjectWorkspaceVar, String buildFile, boolean deleteRadWorkspaceContent, boolean deleteRadWorkspaceMetadata, String properties, String radInstallationName, String radWorkspace, String targets) {
+        this.activateProjectWorkspaceVar = activateProjectWorkspaceVar;
         this.buildFile = Util.fixEmptyAndTrim(buildFile);
         this.deleteRadWorkspaceContent = deleteRadWorkspaceContent;
         this.deleteRadWorkspaceMetadata = deleteRadWorkspaceMetadata;
         this.properties = Util.fixEmptyAndTrim(properties);
+        this.radInstallationName = radInstallationName;
         this.radWorkspace = Util.fixEmptyAndTrim(radWorkspace);
         this.targets = targets;
     }
@@ -126,6 +132,10 @@ public class RAD extends Builder {
         }
         
         return null;
+    }
+
+    public boolean getActivateProjectWorkspaceVar() {
+        return activateProjectWorkspaceVar;
     }
 
     public String getBuildFile() {
@@ -245,6 +255,13 @@ public class RAD extends Builder {
         // restore it at the end of the run
         String hudsonWorkspaceEnvVar = env.get("WORKSPACE");
         env.remove("WORKSPACE");
+
+        // do the user want to have a variable equivalent to WORKSPACE? if yes,
+        // PROJECT_WORKSPACE is created
+        if(getActivateProjectWorkspaceVar()) {
+            env.put("PROJECT_WORKSPACE", hudsonWorkspaceEnvVar);
+        }
+
         String workspaceEnvVar = RAD_WORKSPACE_ENV_VAR_WIN;
 
         if(launcher.isUnix()) {
@@ -315,6 +332,7 @@ public class RAD extends Builder {
             }
 
             env.put("WORKSPACE", hudsonWorkspaceEnvVar);
+            env.remove("PROJECT_WORKSPACE");
         }
     }
 
