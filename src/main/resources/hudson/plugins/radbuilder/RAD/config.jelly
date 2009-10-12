@@ -44,6 +44,15 @@
         <f:entry title="${%RAD workspace}" field="radWorkspace" description="${%Path relative to the workspace of the project}">
             <f:textbox name="rad.radWorkspace" value="${instance.radWorkspace}"/>
         </f:entry>
+        <f:entry title="" field="activateProjectWorkspaceVar">
+            <f:checkbox
+                id="rad.activateProjectWorkspaceVar"
+                name="rad.activateProjectWorkspaceVar"
+                checked="${instance.activateProjectWorkspaceVar}" />
+            <label for="rad.activateProjectWorkspaceVar">
+                ${%Create PROJECT_WORKSPACE variable}
+            </label>
+        </f:entry>
         <f:entry title="" field="deleteRadWorkspaceContent">
             <f:checkbox
                 id="rad.deleteRadWorkspaceContent"
