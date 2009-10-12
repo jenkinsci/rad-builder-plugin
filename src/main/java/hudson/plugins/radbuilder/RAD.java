@@ -57,7 +57,7 @@ import org.kohsuke.stapler.StaplerRequest;
  * end of the execution of the builder</p>
  *
  * @author Romain Seguy
- * @version 1.0
+ * @version 1.0.1
  */
 public class RAD extends Builder {
 
@@ -218,17 +218,6 @@ public class RAD extends Builder {
 
         // --- RAD workspace ---
 
-        // runAnt.bat/runAnt.sh does not use the same worskpace variable:
-        // it is "WORKSPACE" on Windows, "workspace" on Linux
-        String workspaceEnvVar = RAD_WORKSPACE_ENV_VAR_UNIX;
-        String hudsonWorkspaceEnvVar = null;
-        if(!launcher.isUnix()) {
-            // we need to backup Hudson's WORKSPACE variable to restore it at
-            // the end of the run
-            hudsonWorkspaceEnvVar = env.get("WORKSPACE");
-            workspaceEnvVar = RAD_WORKSPACE_ENV_VAR_WIN;
-        }
-
         FilePath radWorkspaceFilePath;
         if(getRadWorkspace() != null) {
             // we're 100% sure that project.getWorkspace() is not null since we
@@ -250,10 +239,19 @@ public class RAD extends Builder {
             radWorkspaceFilePath.mkdirs();
         }
 
+        // runAnt.bat/runAnt.sh does not use the same worskpace variable: it is
+        // "WORKSPACE" on Windows, "workspace" on Linux
+        // anyway, we need to backup and remove Hudson's WORKSPACE variable to
+        // restore it at the end of the run
+        String hudsonWorkspaceEnvVar = env.get("WORKSPACE");
+        env.remove("WORKSPACE");
+        String workspaceEnvVar = RAD_WORKSPACE_ENV_VAR_WIN;
+
+        if(launcher.isUnix()) {
+            workspaceEnvVar = RAD_WORKSPACE_ENV_VAR_UNIX;
+        }
+
         env.put(workspaceEnvVar, radWorkspaceFilePath.getName());
-env.put("aaaaaa", "aaaaaa");
-listener.error("*** aaaaaa: " + env.get("aaaaaa").toString());
-listener.error("*** AAAAAA: " + env.get("AAAAAA").toString());
 
         if(getDeleteRadWorkspaceContent()) {
             // we remove the whole content of the workspace, including .metadata
@@ -309,9 +307,14 @@ listener.error("*** AAAAAA: " + env.get("AAAAAA").toString());
         }
         finally {
             // we need to restore Hudson's WORKSPACE environment variable
-            if(hudsonWorkspaceEnvVar != null) {
-                env.put("WORKSPACE", hudsonWorkspaceEnvVar);
+            if(launcher.isUnix()) {
+                env.remove(RAD_WORKSPACE_ENV_VAR_UNIX);
             }
+            else {
+                env.remove(RAD_WORKSPACE_ENV_VAR_WIN);
+            }
+
+            env.put("WORKSPACE", hudsonWorkspaceEnvVar);
         }
     }
 
