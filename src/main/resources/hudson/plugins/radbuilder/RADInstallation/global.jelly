@@ -21,22 +21,21 @@
   - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   - THE SOFTWARE.
   -->
+
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
     <f:section title="IBM Rational Application Developer 7.0/7.5">
         <f:entry title="${%RAD installations}" description="${%List of RAD installations on this system}">
             <f:repeatable name="rad" var="instance" items="${descriptor.installations}" add="${%Add RAD}">
                 <table width="100%">
                     <f:entry field="name" title="${%Name}">
-                        <f:textbox />
+                        <f:textbox/>
                     </f:entry>
-
                     <f:entry field="home" title="${%Installation directory}">
-                        <f:textbox />
+                        <f:textbox/>
                     </f:entry>
-
                     <f:entry title="">
                         <div align="right">
-                            <f:repeatableDeleteButton value="${%Delete RAD}" />
+                            <f:repeatableDeleteButton value="${%Delete RAD}"/>
                         </div>
                     </f:entry>
                 </table>
