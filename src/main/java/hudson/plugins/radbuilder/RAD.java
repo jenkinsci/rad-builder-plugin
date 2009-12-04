@@ -198,10 +198,10 @@ public class RAD extends Builder {
 
         String lBuildFile;
         if(getBuildFile() == null) {
-            lBuildFile = env.expand("build.xml");
+            lBuildFile = "build.xml";
         }
         else {
-            lBuildFile = env.expand(getBuildFile());
+            lBuildFile = Util.replaceMacro(env.expand(getBuildFile()), varResolver);
         }
 
         if(project.getWorkspace() == null) {
@@ -218,8 +218,7 @@ public class RAD extends Builder {
 
         // --- properties ---
 
-        args.addKeyValuePairs("-D", build.getBuildVariables());
-        args.addKeyValuePairsFromPropertyString("-D", getProperties(), varResolver);
+        args.addKeyValuePairsFromPropertyString("-D", env.expand(getProperties()), varResolver);
 
         // --- targets ---
 
@@ -268,7 +267,14 @@ public class RAD extends Builder {
             workspaceEnvVar = RAD_WORKSPACE_ENV_VAR_UNIX;
         }
 
-        env.put(workspaceEnvVar, radWorkspaceFilePath.getName());
+        if(!launcher.isUnix()) {
+            // on Windows, we need the WORKSPACE var to be an absolute path,
+            // otherwise we get an "incorrect workspace=..." error
+            env.put(workspaceEnvVar, radWorkspaceFilePath.toURI().getPath().substring(1));
+        }
+        else {
+            env.put(workspaceEnvVar, radWorkspaceFilePath.getName());
+        }
 
         if(getDeleteRadWorkspaceContent()) {
             // we remove the whole content of the workspace, including .metadata
