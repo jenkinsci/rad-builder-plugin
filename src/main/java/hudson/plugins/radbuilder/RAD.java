@@ -36,6 +36,7 @@ import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Computer;
 import hudson.model.Descriptor.FormException;
+import hudson.model.Hudson;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.tools.ToolInstallation;
@@ -374,7 +375,10 @@ public class RAD extends Builder {
 
         @Override
         public boolean isApplicable(Class<? extends AbstractProject> jobType) {
-            return true;
+            if(getInstallations() != null && getInstallations().length > 0) {
+                return true;
+            }
+            return false;
         }
 
         @Override
