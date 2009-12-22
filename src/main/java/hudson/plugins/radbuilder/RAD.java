@@ -195,37 +195,6 @@ public class RAD extends Builder {
             args.add(runAntExecutable);
         }
 
-        // --- build file ---
-
-        String lBuildFile;
-        if(getBuildFile() == null) {
-            lBuildFile = "build.xml";
-        }
-        else {
-            lBuildFile = Util.replaceMacro(env.expand(getBuildFile()), varResolver);
-        }
-
-        if(project.getWorkspace() == null) {
-            listener.fatalError("Unable to find project's workspace");
-            return false;
-        }
-        FilePath buildFilePath = project.getWorkspace().child(lBuildFile);
-        if(!buildFilePath.exists()) {
-            listener.fatalError("Unable to find build script at " + buildFilePath);
-            return false;
-        }
-
-        args.add("-buildfile", buildFilePath.getName());
-
-        // --- properties ---
-
-        args.addKeyValuePairsFromPropertyString("-D", env.expand(getProperties()), varResolver);
-
-        // --- targets ---
-
-        String lTargets = Util.replaceMacro(env.expand(getTargets()), varResolver);
-        args.addTokenized(lTargets.replaceAll("[\t\r\n]+", " "));
-
         // --- RAD workspace ---
 
         FilePath radWorkspaceFilePath;
@@ -288,6 +257,37 @@ public class RAD extends Builder {
                 metadataFilePath.deleteRecursive();
             }
         }
+
+        // --- build file ---
+
+        String lBuildFile;
+        if(getBuildFile() == null) {
+            lBuildFile = "build.xml";
+        }
+        else {
+            lBuildFile = Util.replaceMacro(env.expand(getBuildFile()), varResolver);
+        }
+
+        if(project.getWorkspace() == null) {
+            listener.fatalError("Unable to find project's workspace");
+            return false;
+        }
+        FilePath buildFilePath = project.getWorkspace().child(lBuildFile);
+        if(!buildFilePath.exists()) {
+            listener.fatalError("Unable to find build script at " + buildFilePath);
+            return false;
+        }
+
+        args.add("-buildfile", buildFilePath.getName());
+
+        // --- properties ---
+
+        args.addKeyValuePairsFromPropertyString("-D", env.expand(getProperties()), varResolver);
+
+        // --- targets ---
+
+        String lTargets = Util.replaceMacro(env.expand(getTargets()), varResolver);
+        args.addTokenized(lTargets.replaceAll("[\t\r\n]+", " "));
 
         if(!launcher.isUnix()) {
             // on Windows, executing batch file can't return the correct error code,
