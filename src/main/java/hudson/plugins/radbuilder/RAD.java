@@ -57,7 +57,7 @@ import org.kohsuke.stapler.StaplerRequest;
  * end of the execution of the builder</p>
  *
  * @author Romain Seguy
- * @version 1.1
+ * @version 1.1.1
  */
 public class RAD extends Builder {
 
