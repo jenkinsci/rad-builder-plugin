@@ -53,24 +53,19 @@ import org.kohsuke.stapler.StaplerRequest;
  *
  * <p>Note that, when this builder runs on Windows, there's actually a competition
  * between Hudson's WORKSPACE environment variable and RAD's one, which is named
- * exactly the same. This confusion is dealt with at the beginning and at the
- * end of the execution of the builder</p>
+ * exactly the same (with lower case letters, but Windows doesn't care). This
+ * confusion is dealt with at the beginning and at the end of the execution of
+ * the builder</p>
  *
  * @author Romain Seguy
- * @version 1.1.1
+ * @version 1.1.2
  */
 public class RAD extends Builder {
 
     /**
-     * Name of the environment variable containing the RAD workspace to be used
-     * on Windows.
+     * Name of the environment variable containing the RAD workspace to be used.
      */
-    public final static String RAD_WORKSPACE_ENV_VAR_WIN = "WORKSPACE";
-    /**
-     * Name of the environment variable containing the RAD workspace to be used
-     * on Unix (Linux).
-     */
-    public final static String RAD_WORKSPACE_ENV_VAR_UNIX = "workspace";
+    public final static String RAD_WORKSPACE_ENV_VAR = "workspace";
     /** Name of the .metadata folder of each RAD workspace. */
     public final static String RAD_WORKSAPCE_METADATA_FOLDER = ".metadata";
     /**
@@ -217,32 +212,24 @@ public class RAD extends Builder {
             radWorkspaceFilePath.mkdirs();
         }
 
-        // runAnt.bat/runAnt.sh does not use the same worskpace variable: it is
-        // "WORKSPACE" on Windows, "workspace" on Linux
-        // anyway, we need to backup and remove Hudson's WORKSPACE variable to
-        // restore it at the end of the run
+        // we need to backup and remove Hudson's WORKSPACE variable to restore
+        // it at the end of the run
         String hudsonWorkspaceEnvVar = env.get("WORKSPACE");
         env.remove("WORKSPACE");
 
         // do the user want to have a variable equivalent to WORKSPACE? if yes,
         // PROJECT_WORKSPACE is created
         if(getActivateProjectWorkspaceVar()) {
-            env.put("PROJECT_WORKSPACE", hudsonWorkspaceEnvVar);
-        }
-
-        String workspaceEnvVar = RAD_WORKSPACE_ENV_VAR_WIN;
-
-        if(launcher.isUnix()) {
-            workspaceEnvVar = RAD_WORKSPACE_ENV_VAR_UNIX;
+            env.put("PROJECT_WORKSPACE", hudsonWorkspaceEnvVar.replaceAll("\\\\", "/")); // '\' will be changed to '/'
         }
 
         if(!launcher.isUnix()) {
             // on Windows, we need the WORKSPACE var to be an absolute path,
             // otherwise we get an "incorrect workspace=..." error
-            env.put(workspaceEnvVar, radWorkspaceFilePath.toURI().getPath().substring(1));
+            env.put(RAD_WORKSPACE_ENV_VAR, radWorkspaceFilePath.toURI().getPath().substring(1));
         }
         else {
-            env.put(workspaceEnvVar, radWorkspaceFilePath.getName());
+            env.put(RAD_WORKSPACE_ENV_VAR, radWorkspaceFilePath.getName());
         }
 
         if(getDeleteRadWorkspaceContent()) {
@@ -330,13 +317,7 @@ public class RAD extends Builder {
         }
         finally {
             // we need to restore Hudson's WORKSPACE environment variable
-            if(launcher.isUnix()) {
-                env.remove(RAD_WORKSPACE_ENV_VAR_UNIX);
-            }
-            else {
-                env.remove(RAD_WORKSPACE_ENV_VAR_WIN);
-            }
-
+            env.remove(RAD_WORKSPACE_ENV_VAR);
             env.put("WORKSPACE", hudsonWorkspaceEnvVar);
             env.remove("PROJECT_WORKSPACE");
         }
