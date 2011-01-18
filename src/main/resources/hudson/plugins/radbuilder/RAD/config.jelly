@@ -46,30 +46,27 @@
         </f:entry>
         <f:entry title="" field="activateProjectWorkspaceVar">
             <f:checkbox
-                id="rad.activateProjectWorkspaceVar"
                 name="rad.activateProjectWorkspaceVar"
                 checked="${instance.activateProjectWorkspaceVar}"
                 default="true"/>
-            <label for="rad.activateProjectWorkspaceVar">
+            <label class="attach-previous">
                 ${%Create PROJECT_WORKSPACE variable}
             </label>
         </f:entry>
         <f:entry title="" field="deleteRadWorkspaceContent">
             <f:checkbox
-                id="rad.deleteRadWorkspaceContent"
                 name="rad.deleteRadWorkspaceContent"
                 checked="${instance.deleteRadWorkspaceContent}"
                 default="true"/>
-            <label for="rad.deleteRadWorkspaceContent">
+            <label class="attach-previous">
                 ${%Remove RAD workspace content}
             </label>
         </f:entry>
         <f:entry title="" field="deleteRadWorkspaceMetadata">
             <f:checkbox
-                id="rad.deleteRadWorkspaceMetadata"
                 name="rad.deleteRadWorkspaceMetadata"
                 checked="${instance.deleteRadWorkspaceMetadata}"/>
-            <label for="rad.deleteRadWorkspaceMetadata">
+            <label class="attach-previous">
                 ${%Remove only RAD workspace metadata folder}
             </label>
         </f:entry>
