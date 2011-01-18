@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009, Romain Seguy
+ * Copyright (c) 2009-2011, Romain Seguy
  * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Tom Huybrechts
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,6 +36,8 @@ import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Computer;
 import hudson.model.Descriptor.FormException;
+import hudson.model.Node;
+import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.tools.ToolInstallation;
@@ -119,11 +121,15 @@ public class RAD extends Builder {
      * Returns the {@link RADInstallation} to use when the build takes place
      * ({@code null} if none has been set).
      */
-    public RADInstallation getRadInstallation() {
-        for(RADInstallation installation: getDescriptor().getInstallations()) {
-            if(getRadInstallationName() != null && installation.getName().equals(getRadInstallationName())) {
-                return installation;
+    public RADInstallation getRadInstallation(EnvVars env, Node node, BuildListener listener) {
+        try {
+            for(RADInstallation installation: getDescriptor().getInstallations()) {
+                if(getRadInstallationName() != null && installation.getName().equals(getRadInstallationName())) {
+                    return installation.forEnvironment(env).forNode(node, TaskListener.NULL);
+                }
             }
+        } catch (Exception e) { // IOException, InterruptedException
+            listener.fatalError(ResourceBundleHolder.get(RAD.class).format("FailedToTranslateInstallationHome"));
         }
         
         return null;
@@ -171,7 +177,7 @@ public class RAD extends Builder {
         // --- RAD installation ---
 
         // has a RAD installation been set? if yes, is it really a RAD installation?
-        RADInstallation radInstallation = getRadInstallation();
+        RADInstallation radInstallation = getRadInstallation(env, build.getBuiltOn(), listener);
         if(radInstallation == null) {
             listener.fatalError(ResourceBundleHolder.get(RAD.class).format("NoInstallationSet"));
             return false;
