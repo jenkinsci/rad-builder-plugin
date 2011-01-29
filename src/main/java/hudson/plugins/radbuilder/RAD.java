@@ -31,20 +31,24 @@ import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.Util;
+import hudson.model.BuildListener;
+import hudson.model.TaskListener;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
 import hudson.model.Computer;
-import hudson.model.Descriptor.FormException;
 import hudson.model.Node;
-import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
+import hudson.tasks.Ant;
+import hudson.tasks._ant.AntConsoleAnnotator;
 import hudson.tools.ToolInstallation;
 import hudson.util.ArgumentListBuilder;
 import hudson.util.VariableResolver;
+
 import java.io.IOException;
+
 import net.sf.json.JSONObject;
+
 import org.jvnet.localizer.ResourceBundleHolder;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
@@ -59,8 +63,7 @@ import org.kohsuke.stapler.StaplerRequest;
  * confusion is dealt with at the beginning and at the end of the execution of
  * the builder</p>
  *
- * @author Romain Seguy
- * @version 1.1.2
+ * @author Romain Seguy (http://openromain.blogspot.com)
  */
 public class RAD extends Builder {
 
@@ -95,7 +98,7 @@ public class RAD extends Builder {
     /** Optional RAD workspace relative to the Hudson project's workspace */
     private final String radWorkspace;
     /**
-     * Optional lTargets, properties, and other Ant options, separated by
+     * Optional targets, properties, and other Ant options, separated by
      * whitespaces or newlines.
      */
     private final String targets;
@@ -286,8 +289,9 @@ public class RAD extends Builder {
         }
 
         long startTime = System.currentTimeMillis();
+        AntConsoleAnnotator consoleAnnotator = new AntConsoleAnnotator(listener.getLogger(),build.getCharset());
         try {
-            int r = launcher.launch().cmds(args).envs(env).stdout(listener).pwd(buildFilePath.getParent()).join();
+            int r = launcher.launch().cmds(args).envs(env).stdout(consoleAnnotator).pwd(buildFilePath.getParent()).join();
 
             return r == 0;
         }
@@ -309,6 +313,8 @@ public class RAD extends Builder {
             return false;
         }
         finally {
+            consoleAnnotator.forceEol();
+
             // we need to restore Hudson's WORKSPACE environment variable
             env.remove(RAD_WORKSPACE_ENV_VAR);
             env.put("WORKSPACE", hudsonWorkspaceEnvVar);

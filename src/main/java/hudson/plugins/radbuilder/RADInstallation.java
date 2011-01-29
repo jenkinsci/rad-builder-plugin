@@ -27,21 +27,26 @@ package hudson.plugins.radbuilder;
 
 import hudson.EnvVars;
 import hudson.Extension;
+import hudson.Functions;
 import hudson.Launcher;
 import hudson.Util;
 import hudson.model.EnvironmentSpecific;
+import hudson.model.TaskListener;
 import hudson.model.Hudson;
 import hudson.model.Node;
-import hudson.model.TaskListener;
 import hudson.remoting.Callable;
 import hudson.slaves.NodeSpecific;
+import hudson.tasks.Ant;
 import hudson.tools.ToolDescriptor;
 import hudson.tools.ToolInstallation;
 import hudson.util.FormValidation;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+
 import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.jvnet.localizer.ResourceBundleHolder;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -55,9 +60,7 @@ import org.kohsuke.stapler.StaplerRequest;
  * <p>To use a {@link RAD} build step, it is mandatory to define a installation:
  * No default installations can be assumed.</p>
  *
- *
- * @author Romain Seguy (using {@link Ant#AntInstallation} as an input)
- * @version 1.0
+ * @author Romain Seguy (http://openromain.blogspot.com)
  */
 public class RADInstallation extends ToolInstallation implements NodeSpecific<RADInstallation>, EnvironmentSpecific<RADInstallation> {
 
@@ -100,7 +103,7 @@ public class RADInstallation extends ToolInstallation implements NodeSpecific<RA
     private File getRunAntFile(String binFolder) {
         String runAntFileName = "runAnt.sh";
 
-        if(Hudson.isWindows()) {
+        if(Functions.isWindows()) {
             runAntFileName = "runAnt.bat";
         }
 
@@ -158,7 +161,7 @@ public class RADInstallation extends ToolInstallation implements NodeSpecific<RA
             }
 
             // let's check for the runAnt file existence
-            if(Hudson.isWindows()) {
+            if(Functions.isWindows()) {
                 boolean noRADRunAntBat = false;  // RAD on Windows
                 boolean noBURunAntBat = false;   // RAD BU on Windows
 
