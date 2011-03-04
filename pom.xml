@@ -13,7 +13,7 @@
   <packaging>hpi</packaging>
   <name>RAD Builder Plugin</name>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/RAD+Builder+Plugin</url>
-  <version>1.1.4</version>
+  <version>1.1.5-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,9 +42,9 @@
 
   <!-- see http://groups.google.com/group/hudson-dev/browse_thread/thread/83e34c639eec470a for the rationale behind this -->
   <scm>
-    <connection>scm:svn:https://guest@svn.jenkins-ci.org/tags/rad-builder-1.1.4</connection>
-    <developerConnection>scm:svn:https://svn.jenkins-ci.org/tags/rad-builder-1.1.4</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/tags/rad-builder-1.1.4</url>
+    <connection>scm:svn:https://guest@svn.jenkins-ci.org/trunk/hudson/plugins/rad-builder/</connection>
+    <developerConnection>scm:svn:https://svn.jenkins-ci.org/trunk/hudson/plugins/rad-builder/</developerConnection>
+    <url>https://hudson.dev.java.net/source/browse/hudson/trunk/hudson/plugins/rad-builder</url>
   </scm>
 
   <!-- see http://groups.google.com/group/hudson-dev/browse_thread/thread/6ea03cf2b527376c for the rationale behind this -->
