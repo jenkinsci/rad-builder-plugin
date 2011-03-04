@@ -36,7 +36,6 @@ import hudson.model.Hudson;
 import hudson.model.Node;
 import hudson.remoting.Callable;
 import hudson.slaves.NodeSpecific;
-import hudson.tasks.Ant;
 import hudson.tools.ToolDescriptor;
 import hudson.tools.ToolInstallation;
 import hudson.util.FormValidation;

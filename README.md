@@ -1,6 +1,6 @@
 RAD Builder plugin
 ==================
-Copyright &copy; 2009-2011, Romain Seguy, and other contributors. Licensed under [MIT License].
+Copyright &copy; 2009-2011, Romain Seguy, and other contributors. Licensed under MIT License.
 
 About this plugin
 -----------------

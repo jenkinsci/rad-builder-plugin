@@ -25,9 +25,9 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
     <j:if test="${!empty(descriptor.installations)}">
         <f:entry title="${%RAD installation}" field="radInstallationName">
-            <select name="rad.radInstallationName" class="setting-input" field="">
+            <select name="rad.radInstallationName" class="setting-input">
                 <j:forEach var="installation" items="${descriptor.installations}">
-                    <f:option selected="${installation.name==instance.radInstallation.name}" value="${installation.name}">
+                    <f:option selected="${installation.name==instance.radInstallationName}" value="${installation.name}">
                         ${installation.name}
                     </f:option>
                 </j:forEach>
